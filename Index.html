@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Centra – Money Tracker</title>
+<title>Centra &#x2013; Money Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#050b1a;--card:#0a1530;--line:#15294f;--blue:#2563eb;--blue2:#1d4ed8;--glow:#3b82f6;--tx:#eaf0ff;--mut:#7d8db0;--in:#34d399;--out:#f87171;
@@ -132,11 +132,14 @@ header,main{position:relative;z-index:1}nav{z-index:2;background:linear-gradient
     <div class="logo"><svg viewBox="0 0 24 24" fill="#3b82f6"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>CENTRA</div>
     <button class="ic" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7zM10 20h4"/></svg></button>
   </header>
-  <main id="main"></main>
+  <main id="main"><div class="card"><h2>Loading Centra&#x2026;</h2><div class="sub">If this message stays, your viewer is blocking JavaScript. Open this file in Chrome or Safari.</div></div><noscript><div class="card"><h2>JavaScript is off</h2><div class="sub">Centra needs JavaScript. Turn it on or open the file in Chrome or Safari.</div></div></noscript></main>
   <nav id="nav"></nav>
   <div class="sheet" id="sheet"></div>
   <div class="toast" id="toast"></div>
 </div>
+<script>
+window.addEventListener("error",function(e){var m=document.getElementById("main");if(m&&!window.__ok)m.innerHTML='<div class="card"><h2>Something failed to load</h2><div class="sub">'+e.message+" (line "+e.lineno+")</div></div>"});
+</script>
 <script>
 const I={
 home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -156,7 +159,7 @@ txn:'<path d="M7 4v13M3 13l4 4 4-4M17 20V7M13 11l4-4 4 4"/>',plus:'<path d="M12 
 newrec:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M12 14v6M9 17h6"/>',
 repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>'};
 const svg=(n,s='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ${s}>${I[n]}</svg>`;
-let CUR={code:'INR',sym:'₹',loc:'en-IN',dec:0};
+let CUR={code:'INR',sym:'\u20b9',loc:'en-IN',dec:0};
 const inr=n=>CUR.sym+Number(n).toLocaleString(CUR.loc,{minimumFractionDigits:CUR.dec,maximumFractionDigits:CUR.dec});
 
 const WS={
@@ -166,22 +169,22 @@ const WS={
  Shop:{bal:184300,inc:230000,exp:176400,save:53600,budget:88}};
 let ws='Personal',tab='home';
 const TX=[
- ['🍔','Swiggy','Food & Dining · HDFC Credit',-486,'Today'],
- ['💼','Salary – Acme Corp','Income · Bank',85000,'Today'],
- ['🚕','Uber','Transport · UPI Wallet',-214,'Yesterday'],
- ['🛒','BigBasket','Groceries · Debit Card',-1842,'Yesterday'],
- ['📺','Netflix','Subscriptions · HDFC Credit',-649,'29 Sep'],
- ['🏠','Rent','Housing · Bank',-18000,'28 Sep'],
- ['💡','Electricity bill','Bills · UPI Wallet',-1320,'27 Sep']];
-const txRow=t=>`<div class="tx"><div class="ic">${t[0]}</div><div class="m"><b>${t[1]}</b><small>${t[2]}</small></div><div style="text-align:right"><div class="amt ${t[5]?'':t[3]>0?'in':'out'}">${t[5]?'⇄ ':t[3]>0?'+':'−'}${inr(Math.abs(t[3]))}</div><small>${t[4]}</small></div></div>`;
+ ['\ud83c\udf54','Swiggy','Food & Dining \u00b7 HDFC Credit',-486,'Today'],
+ ['\ud83d\udcbc','Salary \u2013 Acme Corp','Income \u00b7 Bank',85000,'Today'],
+ ['\ud83d\ude95','Uber','Transport \u00b7 UPI Wallet',-214,'Yesterday'],
+ ['\ud83d\uded2','BigBasket','Groceries \u00b7 Debit Card',-1842,'Yesterday'],
+ ['\ud83d\udcfa','Netflix','Subscriptions \u00b7 HDFC Credit',-649,'29 Sep'],
+ ['\ud83c\udfe0','Rent','Housing \u00b7 Bank',-18000,'28 Sep'],
+ ['\ud83d\udca1','Electricity bill','Bills \u00b7 UPI Wallet',-1320,'27 Sep']];
+const txRow=t=>`<div class="tx"><div class="ic">${t[0]}</div><div class="m"><b>${t[1]}</b><small>${t[2]}</small></div><div style="text-align:right"><div class="amt ${t[5]?'':t[3]>0?'in':'out'}">${t[5]?'\u21c4 ':t[3]>0?'+':'\u2212'}${inr(Math.abs(t[3]))}</div><small>${t[4]}</small></div></div>`;
 
 function home(){const d=WS[ws];return`
 <div class="ws">${Object.keys(WS).map(k=>`<button class="pill ${k==ws?'on':''}" data-ws="${k}">${k}</button>`).join('')}<button class="pill">All workspaces</button></div>
-<div class="row" style="margin-bottom:12px"><div><h1>Good morning, ${PROF.name.split(' ')[0]} 👋</h1><div class="sub">Let's keep every rupee in view.</div></div></div>
-<div class="card"><div class="row"><h2>Net balance · ${ws}</h2><span class="tag"><i></i>Synced</span></div>
+<div class="row" style="margin-bottom:12px"><div><h1>Good morning, ${PROF.name.split(' ')[0]} \ud83d\udc4b</h1><div class="sub">Let's keep every rupee in view.</div></div></div>
+<div class="card"><div class="row"><h2>Net balance \u00b7 ${ws}</h2><span class="tag"><i></i>Synced</span></div>
 <div class="bal">${inr(d.bal)}</div>
-<div class="sub">Budget used this month · ${d.budget}%</div><div class="bar"><b style="width:${d.budget}%"></b></div>
-<div class="stats"><div class="stat"><small>Income</small><b class="in">+${inr(d.inc)}</b></div><div class="stat"><small>Expenses</small><b class="out">−${inr(d.exp)}</b></div></div></div>
+<div class="sub">Budget used this month \u00b7 ${d.budget}%</div><div class="bar"><b style="width:${d.budget}%"></b></div>
+<div class="stats"><div class="stat"><small>Income</small><b class="in">+${inr(d.inc)}</b></div><div class="stat"><small>Expenses</small><b class="out">\u2212${inr(d.exp)}</b></div></div></div>
 ${upcoming()}
 <div class="card"><div class="row"><h2>Quick access</h2><span class="sub">View all</span></div>
 <div class="grid4"><button class="q" data-go="add" data-t="Income">${svg('income','style="color:#34d399"')}Income</button><button class="q" data-go="add" data-t="Expense">${svg('expense','style="color:#f87171"')}Expense</button><button class="q" data-go="add" data-t="Transfer">${svg('swap')}Transfer</button><button class="q" data-tab="rec">${svg('repeat')}Recurring</button><button class="q">${svg('scan')}Scan bill</button><button class="q">${svg('bill')}Bills</button><button class="q">${svg('goal')}Goals</button><button class="q" data-tab="rep">${svg('chart')}Reports</button></div></div>
@@ -192,10 +195,10 @@ function txs(){return`<h1 style="margin:6px 0 12px">Transactions</h1>
 <div class="card">${TX.map(txRow).join('')}</div>`}
 
 function accs(){
-const A=[['Cash in hand','Cash',12400,0],['HDFC Savings','Bank ••4821',186250,0],['HDFC Regalia','Credit card ••9032',-28400,57],['ICICI Debit','Debit card ••1177',38000,0],['PhonePe / UPI','Wallet',11600,0]];
+const A=[['Cash in hand','Cash',12400,0],['HDFC Savings','Bank \u2022\u20224821',186250,0],['HDFC Regalia','Credit card \u2022\u20229032',-28400,57],['ICICI Debit','Debit card \u2022\u20221177',38000,0],['PhonePe / UPI','Wallet',11600,0]];
 return`<div class="row" style="margin:6px 0 12px"><h1>Accounts</h1><span class="tag">${A.length} active</span></div>
-${A.map(a=>`<div class="card acc"><div class="row"><div><h2>${a[0]}</h2><div class="sub">${a[1]}</div></div><div style="font-weight:700;font-size:18px" class="${a[2]<0?'out':''}">${a[2]<0?'−':''}${inr(Math.abs(a[2]))}</div></div>
-${a[3]?`<div class="sub" style="margin-top:10px">Credit used ${a[3]}% of ₹50,000 · Due 15 Oct</div><div class="bar"><b style="width:${a[3]}%"></b></div>`:''}</div>`).join('')}`}
+${A.map(a=>`<div class="card acc"><div class="row"><div><h2>${a[0]}</h2><div class="sub">${a[1]}</div></div><div style="font-weight:700;font-size:18px" class="${a[2]<0?'out':''}">${a[2]<0?'\u2212':''}${inr(Math.abs(a[2]))}</div></div>
+${a[3]?`<div class="sub" style="margin-top:10px">Credit used ${a[3]}% of \u20b950,000 \u00b7 Due 15 Oct</div><div class="bar"><b style="width:${a[3]}%"></b></div>`:''}</div>`).join('')}`}
 
 function reports(){
 const pts=[30,42,36,55,48,62,52,70,64,82,74,90];
@@ -213,7 +216,7 @@ return`<div class="row" style="margin:6px 0 12px"><h1>Reports</h1><span class="t
 <div class="legend">${cats.map(c=>`<div class="row"><span><i style="background:${c[2]}"></i>${c[0]}</span><b>${c[1]}%</b></div>`).join('')}</div></div></div>`}
 
 
-/* ---------- Recurring engine: Rule → Event → Transaction ---------- */
+/* ---------- Recurring engine: Rule \u2192 Event \u2192 Transaction ---------- */
 const IC={Expense:'expense',Income:'income',Transfer:'swap'};
 const pd=t=>{const[a,b,c]=t.split('-');return new Date(+a,b-1,+c)};
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -231,7 +234,7 @@ let RDEF={freq:'month',rem:3,acct:'HDFC Savings',pm:'UPI'};
 const mk=o=>({type:'pay',name:'',amt:'',cat:'Utilities',freq:RDEF.freq,every:1,wd:[1],mode:'date',dom:5,nth:1,nwd:1,mon:0,start:iso(today()),end:'never',endN:12,endD:'',bal:0,dadj:'last',wk:'keep',rems:[RDEF.rem],odue:true,dest:{Email:['owner@example.com'],WhatsApp:[],Webhook:[]},push:true,acct:RDEF.acct,to:'HDFC Regalia',amode:'fixed',pm:RDEF.pm,inc:'none',incV:0,incN:1,incU:'year',wkDays:2,varAmt:false,auto:false,cancelled:false,pauses:[],ov:{},hist:[],adv:false,...o});
 const od5=addD(today(),-5);
 let REC=[
- mk({id:1,type:'col',name:'Salary – Acme Corp',amt:85000,dom:1,rems:[0],cat:'Income',pm:'Bank transfer',auto:true}),
+ mk({id:1,type:'col',name:'Salary \u2013 Acme Corp',amt:85000,dom:1,rems:[0],cat:'Income',pm:'Bank transfer',auto:true}),
  mk({id:2,type:'pay',name:'Rent',amt:18000,dom:5,cat:'Housing',inc:'pct',incV:5,rems:[3,1]}),
  mk({id:3,type:'pay',name:'Netflix',amt:649,dom:12,cat:'Subscription',acct:'HDFC Regalia',pm:'Credit card',hist:[{key:'2026-09-12',date:'2026-09-12',paid:649,status:'paid',acct:'ICICI Credit Card',pm:'Credit card'},{key:'2026-08-12',date:'2026-08-12',paid:649,status:'paid',acct:'HDFC Regalia',pm:'Credit card'}]}),
  mk({id:4,type:'pay',name:'Car EMI',amt:18500,dom:10,cat:'Loan / EMI',end:'n',endN:24,rems:[7,3,1,0]}),
@@ -274,11 +277,11 @@ function desc(r){const e=r.every,u=n=>e==1?n:e+' '+n+'s';let s;
  else if(r.freq=='week')s=`Every ${u('week')} on ${[...r.wd].sort().map(i=>DN[i].slice(0,3)).join(', ')}`;
  else if(r.freq=='month')s=`Every ${u('month')} ${r.mode=='last'?'on the last day':r.mode=='nth'?`on the ${NTH[r.nth]} ${DN[r.nwd]}`:'on the '+ord(r.dom)}`;
  else s=`Every ${u('year')} on ${r.dom} ${MN[r.mon]}`;
- return s+(r.end=='n'?` · ${r.endN} times`:r.end=='d'&&r.endD?` · until ${fmt(pd(r.endD))}`:r.end=='bal'?' · until balance is zero':'')}
+ return s+(r.end=='n'?` \u00b7 ${r.endN} times`:r.end=='d'&&r.endD?` \u00b7 until ${fmt(pd(r.endD))}`:r.end=='bal'?' \u00b7 until balance is zero':'')}
 function rrow(r){const i=info(r),n=i.nx,col=r.type=='col',xf=r.type=='xfer',od=n&&n.status=='overdue',k=n?daysTo(n.due):99;
  const right=i.st!='active'?`<span class="st pa">${i.st}</span>`:od?`<span class="st od">${-k}d overdue</span>`:n?`<small style="color:var(--mut);font-size:11px">${rel(n.due)}</small>`:'';
- return `<div class="rrow ${i.st=='active'?'':'off'}" data-re="${r.id}" role="button" tabindex="0"><div class="dayb ${od?'od':''}"><b>${n?n.due.getDate():'–'}</b><small>${n?MN[n.due.getMonth()]:i.st}</small></div>
- <div class="m"><b>${r.name}</b><small>${desc(r)} · ${xf?r.acct+' → '+r.to:r.pm}</small></div><div style="text-align:right"><div class="amt ${xf?'':col?'in':'out'}">${xf?'⇄ ':col?'+':'−'}${inr(n?n.amt:+r.amt||0)}</div>${right}</div></div>`}
+ return `<div class="rrow ${i.st=='active'?'':'off'}" data-re="${r.id}" role="button" tabindex="0"><div class="dayb ${od?'od':''}"><b>${n?n.due.getDate():'\u2013'}</b><small>${n?MN[n.due.getMonth()]:i.st}</small></div>
+ <div class="m"><b>${r.name}</b><small>${desc(r)} \u00b7 ${xf?r.acct+' \u2192 '+r.to:r.pm}</small></div><div style="text-align:right"><div class="amt ${xf?'':col?'in':'out'}">${xf?'\u21c4 ':col?'+':'\u2212'}${inr(n?n.amt:+r.amt||0)}</div>${right}</div></div>`}
 const nxd=r=>{const n=info(r).nx;return n?+n.due:9e15};
 function upcoming(){const L=[...REC].filter(r=>info(r).st=='active'&&info(r).nx).sort((a,b)=>nxd(a)-nxd(b)).slice(0,3);
  return `<div class="card"><div class="row"><div><h2>Upcoming</h2><div class="sub">Payments and collections</div></div><button class="pill on" data-tab="rec">${svg('manage')}Manage</button></div>
@@ -288,20 +291,20 @@ const FF={all:()=>1,pay:r=>r.type=='pay',col:r=>r.type=='col',xfer:r=>r.type=='x
 function recurring(){const t=addD(today(),30);let up=0,ex=0,ov=0,ac=0,tr=0,ovn=0;
  REC.forEach(r=>{const i=info(r);if(i.st=='active')ac++;if(i.st!='active')return;i.ev.forEach(e=>{const rem=e.amt-e.paid;if(e.status=='paid')return;if(e.status=='overdue'){ov+=rem;ovn+=r.type=='pay'?-rem:r.type=='col'?rem:0}else if(e.due<=t){if(r.type=='pay')up+=rem;else if(r.type=='col')ex+=rem;else tr+=rem}})});
  const bal=WS[ws].bal,rows=REC.filter(r=>FF[FLT](r,info(r))).sort((a,b)=>nxd(a)-nxd(b));
- return `<div class="row" style="margin:6px 0 12px"><div class="row" style="gap:10px"><button class="ic" data-tab="home" aria-label="Back to home">‹</button><h1>Recurring</h1></div><button class="pill on" data-rnew>${svg('newrec')}New</button></div>
+ return `<div class="row" style="margin:6px 0 12px"><div class="row" style="gap:10px"><button class="ic" data-tab="home" aria-label="Back to home">\u2039</button><h1>Recurring</h1></div><button class="pill on" data-rnew>${svg('newrec')}New</button></div>
  <div class="stats4"><div class="card" style="margin:0"><div class="sub">Upcoming payments</div><b class="out" style="font-size:18px">${inr(up)}</b></div><div class="card" style="margin:0"><div class="sub">Expected collections</div><b class="in" style="font-size:18px">${inr(ex)}</b></div><div class="card" style="margin:0"><div class="sub">Overdue</div><b style="font-size:18px;color:${ov?'#f87171':'inherit'}">${inr(ov)}</b></div><div class="card" style="margin:0"><div class="sub">Active rules</div><b style="font-size:18px">${ac}</b></div></div>
- <div class="card" style="padding:12px 14px"><div class="row"><span class="sub">Projected balance · next 30 days</span><b>${inr(bal-up+ex+ovn)}</b></div><div class="sub" style="font-size:10.5px">Forecast only. Your actual balance stays ${inr(bal)} until money really moves.${tr?` Transfers of ${inr(tr)} only move money between your accounts.`:''}</div></div>
+ <div class="card" style="padding:12px 14px"><div class="row"><span class="sub">Projected balance \u00b7 next 30 days</span><b>${inr(bal-up+ex+ovn)}</b></div><div class="sub" style="font-size:10.5px">Forecast only. Your actual balance stays ${inr(bal)} until money really moves.${tr?` Transfers of ${inr(tr)} only move money between your accounts.`:''}</div></div>
  <div class="chips">${Object.keys(FL).map(k=>`<button class="pill ${FLT==k?'on':''}" data-flt="${k}">${FL[k]}</button>`).join('')}</div>
  <div class="card">${rows.map(rrow).join('')||'<div class="sub" style="padding:14px 0">No recurring items match this filter.</div>'}</div>`}
 function detail(){const r=REC.find(x=>x.id==DET),i=info(r),n=i.nx,col=r.type=='col',xf=r.type=='xfer',cls={active:'',paused:'pa',completed:'ok',expired:'pa',cancelled:'od'}[i.st],paused=i.st=='paused';
  const ev=i.ev.filter(e=>e.status!='paid').slice(0,4),hs=[...r.hist].sort((a,b)=>b.key<a.key?-1:1);
- return `<div class="row" style="margin:6px 0 12px"><button class="ic" data-tab="rec" aria-label="Back">‹</button><h1 style="flex:1;margin-left:10px">${r.name}</h1><span class="st ${cls}">${i.st}</span></div>
- <div class="card"><div class="sub">${xf?'Transfer':col?'Collection':'Payment'}${xf?'':' · '+r.cat}</div><div class="bal ${col?'in':''}" style="font-size:30px">${inr(n?n.amt:+r.amt)}</div><div class="sub">${desc(r)}</div>
- <div class="stats"><div class="stat"><small>Next due</small><b style="font-size:14px">${n?fmt(n.due)+' · '+(n.status=='overdue'?'overdue':rel(n.due)):'None'}</b></div><div class="stat"><small>${i.rem!=null?'Remaining balance':xf?'From → To':'Account'}</small><b style="font-size:14px">${i.rem!=null?inr(i.rem):xf?r.acct+' → '+r.to:r.amode=='ask'?'Ask each time':r.acct}</b></div></div>
- <div class="sub" style="margin-top:10px">${r.pm} · reminders ${remsTxt(r.rems)}${r.inc!='none'?' · increases '+(r.inc=='pct'?r.incV+'%':inr(r.incV))+' every '+(r.incN==1?r.incU:r.incN+' '+r.incU+'s'):''}</div></div>
+ return `<div class="row" style="margin:6px 0 12px"><button class="ic" data-tab="rec" aria-label="Back">\u2039</button><h1 style="flex:1;margin-left:10px">${r.name}</h1><span class="st ${cls}">${i.st}</span></div>
+ <div class="card"><div class="sub">${xf?'Transfer':col?'Collection':'Payment'}${xf?'':' \u00b7 '+r.cat}</div><div class="bal ${col?'in':''}" style="font-size:30px">${inr(n?n.amt:+r.amt)}</div><div class="sub">${desc(r)}</div>
+ <div class="stats"><div class="stat"><small>Next due</small><b style="font-size:14px">${n?fmt(n.due)+' \u00b7 '+(n.status=='overdue'?'overdue':rel(n.due)):'None'}</b></div><div class="stat"><small>${i.rem!=null?'Remaining balance':xf?'From \u2192 To':'Account'}</small><b style="font-size:14px">${i.rem!=null?inr(i.rem):xf?r.acct+' \u2192 '+r.to:r.amode=='ask'?'Ask each time':r.acct}</b></div></div>
+ <div class="sub" style="margin-top:10px">${r.pm} \u00b7 reminders ${remsTxt(r.rems)}${r.inc!='none'?' \u00b7 increases '+(r.inc=='pct'?r.incV+'%':inr(r.incV))+' every '+(r.incN==1?r.incU:r.incN+' '+r.incU+'s'):''}</div></div>
  <div class="grid4" style="grid-template-columns:repeat(3,1fr);margin:0 0 14px"><button class="q" data-act="pay">${svg(xf?'swap':col?'income':'expense')}Mark ${xf?'transferred':col?'received':'paid'}</button><button class="q" data-act="skip">${svg('arrow')}Skip next</button><button class="q" data-act="move">${svg('cal')}Reschedule</button><button class="q" data-act="${paused?'resume':'pause'}">${svg('repeat')}${paused?'Resume':'Pause'}</button><button class="q" data-act="edit">${svg('manage')}Edit</button><button class="q" data-act="cancel">${svg('lock')}Cancel</button></div>
- <div class="card"><h2>Upcoming events</h2>${ev.map(e=>`<div class="tx"><div class="m"><b>${fmt(e.due)}</b><small>${e.status=='partial'?inr(e.amt-e.paid)+' still outstanding':'Expected'}${e.early?' · weekend, alert '+fmt(e.early):''}</small></div><span class="st ${e.status=='overdue'?'od':''}">${e.status}</span><div class="amt">${inr(e.amt)}</div></div>`).join('')||'<div class="sub" style="padding:8px 0">No upcoming events.</div>'}</div>
- <div class="card"><h2>History</h2>${hs.map(h=>`<div class="tx"><div class="m"><b>${fmt(pd(h.date))}</b><small>${h.acct} · ${h.pm}</small></div><span class="st ${h.status=='paid'?'ok':''}">${h.status}</span><div class="amt">${inr(h.paid)}</div></div>`).join('')||'<div class="sub" style="padding:8px 0">Nothing completed yet.</div>'}</div>`}
+ <div class="card"><h2>Upcoming events</h2>${ev.map(e=>`<div class="tx"><div class="m"><b>${fmt(e.due)}</b><small>${e.status=='partial'?inr(e.amt-e.paid)+' still outstanding':'Expected'}${e.early?' \u00b7 weekend, alert '+fmt(e.early):''}</small></div><span class="st ${e.status=='overdue'?'od':''}">${e.status}</span><div class="amt">${inr(e.amt)}</div></div>`).join('')||'<div class="sub" style="padding:8px 0">No upcoming events.</div>'}</div>
+ <div class="card"><h2>History</h2>${hs.map(h=>`<div class="tx"><div class="m"><b>${fmt(pd(h.date))}</b><small>${h.acct} \u00b7 ${h.pm}</small></div><span class="st ${h.status=='paid'?'ok':''}">${h.status}</span><div class="amt">${inr(h.paid)}</div></div>`).join('')||'<div class="sub" style="padding:8px 0">Nothing completed yet.</div>'}</div>`}
 function act(a){const r=REC.find(x=>x.id==DET),n=info(r).nx;
  if(a=='edit')return openRec(r.id);
  if(a=='resume'){r.pauses=r.pauses.filter(p=>!(today()>=pd(p.from)&&today()<=pd(p.to)));toast('Resumed');return render()}
@@ -310,26 +313,26 @@ function act(a){const r=REC.find(x=>x.id==DET),n=info(r).nx;
  if(a=='skip'){r.ov[n.key]={type:'skip'};toast('Skipped '+fmt(n.due)+'. Later dates are unchanged');return render()}
  MS={a,key:n&&n.key,exp:n&&n.amt,amt:n&&n.amt,acct:r.acct,dest:r.to,pm:r.pm,extra:'Advance',date:iso(n?n.due:today()),to:iso(addD(today(),30))};msheet(true)}
 function msheet(first){if(first)sheet.classList.remove('full');const r=REC.find(x=>x.id==DET),col=r.type=='col',xf=r.type=='xfer',a=MS.a;let b='';
- if(a=='pay')b=`<div class="sub">${r.name} · expected ${inr(MS.exp)}</div><label class="fld" for="ma">${xf?'Amount transferred':col?'Amount received':'Amount paid'} (₹)</label><input class="inp" id="ma" data-m="amt" type="number" inputmode="decimal" value="${MS.amt}"><div class="sumbox" id="mnote" style="margin:10px 0">${mnote()}</div>
+ if(a=='pay')b=`<div class="sub">${r.name} \u00b7 expected ${inr(MS.exp)}</div><label class="fld" for="ma">${xf?'Amount transferred':col?'Amount received':'Amount paid'} (\u20b9)</label><input class="inp" id="ma" data-m="amt" type="number" inputmode="decimal" value="${MS.amt}"><div class="sumbox" id="mnote" style="margin:10px 0">${mnote()}</div>
  <label class="fld">${xf?'From account':r.amode=='ask'?'Which account?':'Account'}</label><select class="inp" data-m="acct">${ACC.map(x=>`<option ${x==MS.acct?'selected':''}>${x}</option>`).join('')}</select>${xf?`<label class="fld">To account</label><select class="inp" data-m="dest">${ACC.map(x=>`<option ${x==MS.dest?'selected':''}>${x}</option>`).join('')}</select>`:''}
  <label class="fld">Payment method</label><select class="inp" data-m="pm">${PM.map(x=>`<option ${x==MS.pm?'selected':''}>${x}</option>`).join('')}</select>
  <div ${xf?'hidden':''}><label class="fld">If the amount is higher, treat the extra as</label><select class="inp" data-m="extra">${['Advance','Credit','Refundable','Adjustment','Other'].map(x=>`<option>${x}</option>`).join('')}</select></div>`;
  if(a=='move')b=`<div class="sub">Only this one moves. Future dates stay the same.</div><label class="fld">New date</label><input class="inp" type="date" data-m="date" value="${MS.date}">`;
  if(a=='pause')b=`<div class="sub">No events are created during the pause.</div><label class="fld">Resume on</label><input class="inp" type="date" data-m="to" value="${MS.to}">`;
- sheet.innerHTML=`<div class="panel"><div class="row"><h1>${{pay:xf?'Mark as transferred':col?'Mark as received':'Mark as paid',move:'Reschedule this one',pause:'Pause recurring'}[a]}</h1><button class="ic" data-close aria-label="Close">✕</button></div>${b}<button class="cta" style="margin-top:16px" data-msave>Confirm <span>→</span></button></div>`;
+ sheet.innerHTML=`<div class="panel"><div class="row"><h1>${{pay:xf?'Mark as transferred':col?'Mark as received':'Mark as paid',move:'Reschedule this one',pause:'Pause recurring'}[a]}</h1><button class="ic" data-close aria-label="Close">\u2715</button></div>${b}<button class="cta" style="margin-top:16px" data-msave>Confirm <span>\u2192</span></button></div>`;
  if(first)sheet.querySelector('.panel').classList.add('pop');sheet.classList.add('open')}
 function mnote(){const d=(+MS.amt||0)-MS.exp;return d<0?`Partial: ${inr(-d)} stays outstanding.`:d>0?`Extra ${inr(d)} will be saved as ${MS.extra}.`:'Matches the expected amount.'}
 function msave(){const r=REC.find(x=>x.id==DET),col=r.type=='col',a=MS.a;
  if(a=='move'){r.ov[MS.key]={type:'move',to:MS.date};toast('Moved to '+fmt(pd(MS.date)))}
  else if(a=='pause'){r.pauses.push({from:iso(today()),to:MS.to});toast('Paused until '+fmt(pd(MS.to)))}
  else{const amt=+MS.amt;if(!(amt>0)){toast('Enter an amount');return}if(r.type=='xfer'&&MS.acct==MS.dest){toast('From and To must differ');return}let h=r.hist.find(x=>x.key==MS.key);
-  if(!h){h={key:MS.key,paid:0};r.hist.push(h)}h.paid+=amt;h.acct=r.type=='xfer'?MS.acct+' → '+MS.dest:MS.acct;h.pm=MS.pm;h.date=iso(today());h.status=h.paid>=MS.exp?'paid':'partial';if(h.paid>MS.exp)h.extra=MS.extra;
-  if(r.type=='xfer')TX.unshift(['🔁',r.name,'Transfer · '+MS.acct+' → '+MS.dest,amt,'Just now','x']);else TX.unshift([col?'💰':'🧾',r.name,(col?'Collection':'Payment')+' · '+MS.acct+' · '+MS.pm,col?amt:-amt,'Just now']);toast(h.status=='paid'?'Recorded. Next occurrence is ready':'Partial recorded')}
+  if(!h){h={key:MS.key,paid:0};r.hist.push(h)}h.paid+=amt;h.acct=r.type=='xfer'?MS.acct+' \u2192 '+MS.dest:MS.acct;h.pm=MS.pm;h.date=iso(today());h.status=h.paid>=MS.exp?'paid':'partial';if(h.paid>MS.exp)h.extra=MS.extra;
+  if(r.type=='xfer')TX.unshift(['\ud83d\udd01',r.name,'Transfer \u00b7 '+MS.acct+' \u2192 '+MS.dest,amt,'Just now','x']);else TX.unshift([col?'\ud83d\udcb0':'\ud83e\uddfe',r.name,(col?'Collection':'Payment')+' \u00b7 '+MS.acct+' \u00b7 '+MS.pm,col?amt:-amt,'Just now']);toast(h.status=='paid'?'Recorded. Next occurrence is ready':'Partial recorded')}
  sheet.classList.remove('open');render()}
 function sumTxt(){const n=info(R).nx;if(!n)return 'No upcoming date. Check the start and end settings.';const a=R.amt?inr(+R.amt):'the amount',col=R.type=='col';
  return `<b>${desc(R)}</b>, ${R.type=='xfer'?`${a} moves from ${R.acct} to ${R.to} by ${R.pm}`:`${a} ${col?'is received into':'is paid from'} ${R.amode=='ask'?'an account you choose each time':R.acct} by ${R.pm}`}${R.auto?', recorded automatically':'. Nothing is recorded until you confirm'}. Next: <b>${fmt(n.due)}</b>. Reminders: ${remsTxt(R.rems)}${R.odue?', plus overdue alerts':''} via ${chs()}.${R.inc!='none'?` Amount rises ${R.inc=='pct'?R.incV+'%':inr(R.incV)} every ${R.incN==1?R.incU:R.incN+' '+R.incU+'s'}.`:''}${R.dom>28&&R.freq=='month'&&R.mode=='date'?({last:' In short months it uses the last day.',next:' In short months it moves to the 1st of next month.',skip:' Short months are skipped.'})[R.dadj]:''}${R.wk=='notify'?` If it lands on a weekend, we'll alert you ${R.wkDays} day(s) earlier.`:''}`}
 const chs=()=>[...['Email','WhatsApp','Webhook'].filter(c=>R.dest[c].length).map(c=>c+' ('+R.dest[c].length+')'),R.push?'Push':''].filter(Boolean).join(', ')||'the app only';
-const PH={Email:'name@example.com',WhatsApp:'+91 98765 43210',Webhook:'https://…'};
+const PH={Email:'name@example.com',WhatsApp:'+91 98765 43210',Webhook:'https://\u2026'};
 const destUI=()=>['Email','WhatsApp','Webhook'].map(c=>`<div class="sub" style="margin:10px 0 6px">${c}</div><div class="chips" style="flex-wrap:wrap;margin-bottom:6px">${[...new Set([...NCH[c],...R.dest[c]])].map(v=>`<button class="pill ${R.dest[c].includes(v)?'on':''}" data-dt="${c}|${v}">${v}</button>`).join('')||'<span class="sub">None saved yet</span>'}</div><div class="row" style="gap:8px"><input class="inp" id="dn_${c}" placeholder="Add ${PH[c]}" style="padding:10px 12px;font-size:13px"><button class="pill on" data-da="${c}">Add</button></div>`).join('')+tgl('push','Push notification','To the app on your devices.')
 const ch=(k,v,l,cur)=>`<button class="pill ${cur==v?'on':''}" data-set="${k}:${v}">${l}</button>`;
 const mch=(k,v,l)=>`<button class="pill ${R[k].includes(v)?'on':''}" data-tg="${k}:${v}">${l}</button>`;
@@ -341,30 +344,30 @@ function rsheet(first){const p=sheet.querySelector('.panel'),st=p?p.scrollTop:0,
  if(f=='week')cond=`<label class="fld">On these days</label><div class="days">${[0,1,2,3,4,5,6].map(i=>`<button class="${R.wd.includes(i)?'on':''}" data-wd="${i}" aria-label="${DN[i]}">${'SMTWTFS'[i]}</button>`).join('')}</div>`;
  if(f=='month')cond=`<label class="fld">Repeat on</label><div class="chips">${ch('mode','date','A date',R.mode)}${ch('mode','last','Last day',R.mode)}${ch('mode','nth','A weekday',R.mode)}</div>`+(R.mode=='date'?dgrid():R.mode=='nth'?`<div class="two"><select class="inp" data-f="nth" data-n="1" aria-label="Which">${opts(['First','Second','Third','Fourth','Last'],R.nth,1)}</select><select class="inp" data-f="nwd" data-n="1" aria-label="Weekday">${opts(DN,R.nwd)}</select></div>`:'');
  if(f=='year')cond=`<label class="fld">Repeat on</label><div class="two"><select class="inp" data-f="mon" data-n="1" aria-label="Month">${opts(MN,R.mon)}</select><select class="inp" data-f="dom" data-n="1" aria-label="Day">${opts(Array.from({length:31},(_,i)=>i+1),R.dom,1)}</select></div>`;
- sheet.innerHTML=`<div class="panel"><div class="row"><h1>${R.id?'Edit recurring':'New recurring'}</h1><button class="ic" data-close aria-label="Close">✕</button></div>
+ sheet.innerHTML=`<div class="panel"><div class="row"><h1>${R.id?'Edit recurring':'New recurring'}</h1><button class="ic" data-close aria-label="Close">\u2715</button></div>
  <div class="seg">${[['pay','Payment','expense'],['col','Collection','income'],['xfer','Transfer','swap']].map(k=>`<button class="${R.type==k[0]?'on':''}" data-set="type:${k[0]}">${svg(k[2])}${k[1]}</button>`).join('')}</div>
  <div class="sub" style="margin:-4px 0 4px">${R.type=='pay'?'Money leaves your account. Creates an expense.':R.type=='col'?'Money comes in. Creates income.':'Money moves between your own accounts. It is not income or expense.'}</div>
  <label class="fld" for="rn">Name</label><input class="inp" id="rn" data-f="name" placeholder="e.g. Rent, Salary, Netflix" value="${R.name}">
- <label class="fld" for="ra">Amount (₹)</label><input class="inp" id="ra" data-f="amt" type="number" inputmode="decimal" placeholder="0" value="${R.amt}">
+ <label class="fld" for="ra">Amount (\u20b9)</label><input class="inp" id="ra" data-f="amt" type="number" inputmode="decimal" placeholder="0" value="${R.amt}">
  ${R.type=='xfer'?'':`<label class="fld">Category</label><div class="chips">${CAT.map(c=>ch('cat',c,c,R.cat)).join('')}</div>`}
  ${R.type=='xfer'?`<div class="two"><div><label class="fld">From</label>${sel('acct',ACC)}</div><div><label class="fld">To</label>${sel('to',ACC)}</div></div>`:`<label class="fld">Account</label><div class="chips">${ch('amode','fixed','Always this account',R.amode)}${ch('amode','ask','Ask every time',R.amode)}</div>${R.amode=='fixed'?sel('acct',ACC):''}`}
  <label class="fld">Payment method</label><div class="chips">${PM.map(c=>ch('pm',c,c,R.pm)).join('')}</div>
  <label class="fld">Repeats</label><div class="chips">${[['day','Daily'],['week','Weekly'],['month','Monthly'],['year','Yearly']].map(x=>ch('freq',x[0],x[1],f)).join('')}</div>
- <div class="swrow" style="margin:0 0 8px"><span>Every</span><div class="stepper"><button data-step="-1" aria-label="Less">−</button><b>${R.every}</b><button data-step="1" aria-label="More">+</button><span>${U}</span></div></div>${cond}
+ <div class="swrow" style="margin:0 0 8px"><span>Every</span><div class="stepper"><button data-step="-1" aria-label="Less">\u2212</button><b>${R.every}</b><button data-step="1" aria-label="More">+</button><span>${U}</span></div></div>${cond}
  <label class="fld" for="rs">Starts on</label><input class="inp" id="rs" data-f="start" type="date" value="${R.start}">
  <label class="fld">Ends</label><div class="chips" style="margin-bottom:0">${ch('end','never','Never',R.end)}${ch('end','d','On a date',R.end)}${ch('end','n','After N times',R.end)}${ch('end','bal','Balance is zero',R.end)}</div>
- ${R.end=='n'?`<input class="inp" data-f="endN" data-n="1" type="number" min="1" value="${R.endN}" aria-label="Number of times">`:R.end=='d'?`<input class="inp" data-f="endD" type="date" value="${R.endD}" aria-label="End date">`:R.end=='bal'?`<input class="inp" data-f="bal" data-n="1" type="number" placeholder="Outstanding balance (₹)" value="${R.bal||''}" aria-label="Outstanding balance">`:''}
+ ${R.end=='n'?`<input class="inp" data-f="endN" data-n="1" type="number" min="1" value="${R.endN}" aria-label="Number of times">`:R.end=='d'?`<input class="inp" data-f="endD" type="date" value="${R.endD}" aria-label="End date">`:R.end=='bal'?`<input class="inp" data-f="bal" data-n="1" type="number" placeholder="Outstanding balance (\u20b9)" value="${R.bal||''}" aria-label="Outstanding balance">`:''}
  <label class="fld">Remind me (pick any)</label><div class="chips" style="flex-wrap:wrap">${[[7,'7 days before'],[3,'3 days before'],[1,'1 day before'],[0,'On the day']].map(x=>mch('rems',x[0],x[1])).join('')}</div>
  <details class="adv" id="adv" ${R.adv?'open':''}><summary>Advanced options</summary>
  ${tgl('varAmt','Amount changes each time','Like electricity. You enter the real amount when you complete it.')}
- <label class="fld">Increase the amount</label><div class="chips">${ch('inc','none','Never',R.inc)}${ch('inc','pct','By percent',R.inc)}${ch('inc','fix','By fixed ₹',R.inc)}</div>
- ${R.inc!='none'?`<input class="inp" data-f="incV" data-n="1" type="number" value="${R.incV}" aria-label="Increase value"><div class="swrow" style="margin-top:10px"><span>every</span><div class="stepper"><button data-istep="-1" aria-label="Less">−</button><b>${R.incN}</b><button data-istep="1" aria-label="More">+</button></div></div><div class="chips">${[['day','Day(s)'],['week','Week(s)'],['month','Month(s)'],['year','Year(s)']].map(x=>ch('incU',x[0],x[1],R.incU)).join('')}</div>`:''}
+ <label class="fld">Increase the amount</label><div class="chips">${ch('inc','none','Never',R.inc)}${ch('inc','pct','By percent',R.inc)}${ch('inc','fix','By fixed \u20b9',R.inc)}</div>
+ ${R.inc!='none'?`<input class="inp" data-f="incV" data-n="1" type="number" value="${R.incV}" aria-label="Increase value"><div class="swrow" style="margin-top:10px"><span>every</span><div class="stepper"><button data-istep="-1" aria-label="Less">\u2212</button><b>${R.incN}</b><button data-istep="1" aria-label="More">+</button></div></div><div class="chips">${[['day','Day(s)'],['week','Week(s)'],['month','Month(s)'],['year','Year(s)']].map(x=>ch('incU',x[0],x[1],R.incU)).join('')}</div>`:''}
  ${f=='month'||f=='year'?`<label class="fld">If the date doesn't exist in a month (29th to 31st)</label><div class="chips" style="flex-wrap:wrap">${ch('dadj','last','Previous day (month end)',R.dadj)}${ch('dadj','next','1st of next month',R.dadj)}${ch('dadj','skip','Skip that month',R.dadj)}</div>`:''}
  ${f!='day'?`<label class="fld">If it lands on a weekend</label><div class="chips" style="flex-wrap:wrap">${ch('wk','keep','Keep it',R.wk)}${ch('wk','prev','Move to Friday',R.wk)}${ch('wk','next','Move to Monday',R.wk)}${ch('wk','notify','Notify me earlier',R.wk)}</div>${R.wk=='notify'?`<div class="chips" style="align-items:center"><span class="sub">Alert me</span>${[1,2,3,5,7].map(n=>ch('wkDays',n,n+(n==1?' day':' days'),R.wkDays)).join('')}<span class="sub">before</span></div>`:''}`:''}
  <label class="fld">Send reminders to</label>${destUI()}
  ${tgl('odue','Overdue reminders','Keep nudging after the due date.')}${tgl('auto','Record automatically','Off means you confirm each one. Safer, since an expected payment may not have happened.')}</details>
  <div class="sumbox" id="rsum">${sumTxt()}</div>
- <button class="cta" data-rsave>Save recurring <span>→</span></button>${R.id?'<button class="del" data-rdel>Delete this recurring</button>':''}</div>`;
+ <button class="cta" data-rsave>Save recurring <span>\u2192</span></button>${R.id?'<button class="del" data-rdel>Delete this recurring</button>':''}</div>`;
  const np=sheet.querySelector('.panel');np.scrollTop=st;if(first)np.classList.add('pop')}
 function openRec(id){sheet.classList.remove('full');R=id?(x=>({...x,wd:[...x.wd],rems:[...x.rems],dest:JSON.parse(JSON.stringify(x.dest))}))(REC.find(x=>x.id==id)):mk({id:0});rsheet(true);sheet.classList.add('open')}
 function saveRec(){if(!R.name.trim()||!(+R.amt>0)){toast('Add a name and an amount');return}
@@ -377,50 +380,50 @@ document.getElementById('app').addEventListener('input',e=>{const t=e.target;
 document.addEventListener('toggle',e=>{if(e.target.id=='adv'&&R)R.adv=e.target.open},true);
 
 /* ---------- More menu & settings ---------- */
-const TI={Cash:'💵',Bank:'🏦','Credit card':'💳','Debit card':'💳',Wallet:'👛'};
+const TI={Cash:'\ud83d\udcb5',Bank:'\ud83c\udfe6','Credit card':'\ud83d\udcb3','Debit card':'\ud83d\udcb3',Wallet:'\ud83d\udc5b'};
 let ACCS=[{id:1,name:'Cash in hand',type:'Cash',bal:12400,cur:'INR',on:true,def:false},{id:2,name:'HDFC Savings',type:'Bank',bal:186250,cur:'INR',on:true,def:true},{id:3,name:'HDFC Regalia',type:'Credit card',bal:-28400,cur:'INR',on:true,def:false},{id:4,name:'ICICI Debit',type:'Debit card',bal:38000,cur:'INR',on:true,def:false},{id:5,name:'ICICI Credit Card',type:'Credit card',bal:0,cur:'INR',on:true,def:false},{id:6,name:'PhonePe / UPI',type:'Wallet',bal:11600,cur:'INR',on:true,def:false}];
 const syncAcc=()=>{ACC.length=0;ACC.push(...ACCS.filter(a=>a.on).map(a=>a.name))};syncAcc();
 let PROF={name:'Arjun Kumar',email:'arjun@example.com',phone:'+91 98765 43210',lang:'English'},ROLE='Owner';
 let NCH={Email:['finance@example.com','owner@example.com'],WhatsApp:['+91 98765 43210'],Webhook:['https://api.example.com/accounting']},AF={};
-const CURS=[['INR','₹','en-IN'],['USD','$','en-US'],['EUR','€','de-DE'],['GBP','£','en-GB']];
-const back=t=>`<div class="row" style="justify-content:flex-start;gap:12px;margin:6px 0 14px"><button class="ic" data-tab="more" aria-label="Back to More">‹</button><h1>${t}</h1></div>`;
+const CURS=[['INR','\u20b9','en-IN'],['USD','$','en-US'],['EUR','\u20ac','de-DE'],['GBP','\u00a3','en-GB']];
+const back=t=>`<div class="row" style="justify-content:flex-start;gap:12px;margin:6px 0 14px"><button class="ic" data-tab="more" aria-label="Back to More">\u2039</button><h1>${t}</h1></div>`;
 const MT={prof:1,acc:1,pm:1,cur:1,nch:1,rdef:1,wsw:1,rep:1,tx:1,rec:1,recp:1,out:1,test:1};
 const SECT=[
-['Profile & Personal',[['👤','My Profile','prof'],['🔐','Security'],['🔔','Notifications','nch'],['🚪','Logout','out']]],
-['Workspace',[['🏢','Workspaces','wsw'],['👥','Members'],['🔑','Roles'],['➕','Create'],['⚙️','Settings'],['🔄','Switch','wsw']]],
-['Financial Setup',[['🏦','Accounts','acc'],['💳','Payment Methods','pm'],['🏷️','Categories'],['📂','Subcategories'],['💱','Currencies','cur'],['👥','People'],['#️⃣','Tags'],['📋','Txn Types']]],
-['Currency & Regional',[['💱','Currency','cur'],['🔢','Number Format','cur'],['🌐','Language','prof'],['📅','Date Format'],['🕐','Time Zone']]],
-['Recurring & Automation',[['🔁','Recurring Rules','rec'],['⏸️','Paused','recp'],['📅','Upcoming','rec'],['🔔','Reminders','nch'],['⚙️','Defaults','rdef'],['🤖','Automation']]],
-['Budget & Planning',[['💰','Budget Settings'],['📊','Budget Plans'],['🚨','Budget Alerts'],['🎯','Savings Goals'],['📅','Periods'],['📈','Forecast']]],
-['Notifications & Integrations',[['🔔','Center'],['📧','Email','nch'],['📱','WhatsApp','nch'],['🔗','API / Webhooks','nch'],['📝','Templates'],['📡','Channels','nch'],['🧪','Test','test']]],
-['Reports & Data',[['📊','Reports','rep'],['📈','Analytics','rep'],['📤','Export'],['📥','Import'],['📄','Statements'],['🗂️','Documents'],['🧾','History','tx']]],
-['Data & Security',[['🔐','Security'],['👥','Access'],['🕐','Login History'],['💾','Backup'],['🗑️','Archived']]],
-['App Settings',[['⚙️','General'],['🎨','Appearance'],['🌙','Dark / Light'],['🏠','Landing Page']]],
-['Admin',[['🛠️','System'],['👥','Users'],['🔑','Roles'],['📋','Logs']]],
-['Help & Support',[['❓','Help Center'],['📖','User Guide'],['🎓','Getting Started'],['💬','Contact'],['🐞','Report Problem'],['💡','Feature Request'],['ℹ️','About'],['📜','Terms & Privacy']]]];
-function more(){return `<div class="card" style="display:flex;align-items:center;gap:14px"><div class="ic" style="width:52px;height:52px;border-radius:50%;font-size:22px">👤</div><div style="flex:1;min-width:0"><h2>${PROF.name}</h2><div class="sub">${PROF.email} · ${ws} · ${ROLE}</div></div><button class="pill" data-mt="prof">Edit</button></div>
+['Profile & Personal',[['\ud83d\udc64','My Profile','prof'],['\ud83d\udd10','Security'],['\ud83d\udd14','Notifications','nch'],['\ud83d\udeaa','Logout','out']]],
+['Workspace',[['\ud83c\udfe2','Workspaces','wsw'],['\ud83d\udc65','Members'],['\ud83d\udd11','Roles'],['\u2795','Create'],['\u2699\ufe0f','Settings'],['\ud83d\udd04','Switch','wsw']]],
+['Financial Setup',[['\ud83c\udfe6','Accounts','acc'],['\ud83d\udcb3','Payment Methods','pm'],['\ud83c\udff7\ufe0f','Categories'],['\ud83d\udcc2','Subcategories'],['\ud83d\udcb1','Currencies','cur'],['\ud83d\udc65','People'],['#\ufe0f\u20e3','Tags'],['\ud83d\udccb','Txn Types']]],
+['Currency & Regional',[['\ud83d\udcb1','Currency','cur'],['\ud83d\udd22','Number Format','cur'],['\ud83c\udf10','Language','prof'],['\ud83d\udcc5','Date Format'],['\ud83d\udd50','Time Zone']]],
+['Recurring & Automation',[['\ud83d\udd01','Recurring Rules','rec'],['\u23f8\ufe0f','Paused','recp'],['\ud83d\udcc5','Upcoming','rec'],['\ud83d\udd14','Reminders','nch'],['\u2699\ufe0f','Defaults','rdef'],['\ud83e\udd16','Automation']]],
+['Budget & Planning',[['\ud83d\udcb0','Budget Settings'],['\ud83d\udcca','Budget Plans'],['\ud83d\udea8','Budget Alerts'],['\ud83c\udfaf','Savings Goals'],['\ud83d\udcc5','Periods'],['\ud83d\udcc8','Forecast']]],
+['Notifications & Integrations',[['\ud83d\udd14','Center'],['\ud83d\udce7','Email','nch'],['\ud83d\udcf1','WhatsApp','nch'],['\ud83d\udd17','API / Webhooks','nch'],['\ud83d\udcdd','Templates'],['\ud83d\udce1','Channels','nch'],['\ud83e\uddea','Test','test']]],
+['Reports & Data',[['\ud83d\udcca','Reports','rep'],['\ud83d\udcc8','Analytics','rep'],['\ud83d\udce4','Export'],['\ud83d\udce5','Import'],['\ud83d\udcc4','Statements'],['\ud83d\uddc2\ufe0f','Documents'],['\ud83e\uddfe','History','tx']]],
+['Data & Security',[['\ud83d\udd10','Security'],['\ud83d\udc65','Access'],['\ud83d\udd50','Login History'],['\ud83d\udcbe','Backup'],['\ud83d\uddd1\ufe0f','Archived']]],
+['App Settings',[['\u2699\ufe0f','General'],['\ud83c\udfa8','Appearance'],['\ud83c\udf19','Dark / Light'],['\ud83c\udfe0','Landing Page']]],
+['Admin',[['\ud83d\udee0\ufe0f','System'],['\ud83d\udc65','Users'],['\ud83d\udd11','Roles'],['\ud83d\udccb','Logs']]],
+['Help & Support',[['\u2753','Help Center'],['\ud83d\udcd6','User Guide'],['\ud83c\udf93','Getting Started'],['\ud83d\udcac','Contact'],['\ud83d\udc1e','Report Problem'],['\ud83d\udca1','Feature Request'],['\u2139\ufe0f','About'],['\ud83d\udcdc','Terms & Privacy']]]];
+function more(){return `<div class="card" style="display:flex;align-items:center;gap:14px"><div class="ic" style="width:52px;height:52px;border-radius:50%;font-size:22px">\ud83d\udc64</div><div style="flex:1;min-width:0"><h2>${PROF.name}</h2><div class="sub">${PROF.email} \u00b7 ${ws} \u00b7 ${ROLE}</div></div><button class="pill" data-mt="prof">Edit</button></div>
  ${SECT.filter(s=>s[0]!='Admin'||ROLE=='Owner'||ROLE=='Admin').map((s,i)=>`<details class="adv" style="margin:0 0 12px" ${i<3?'open':''}><summary>${s[0]}</summary><div class="grid3">${s[1].map(t=>`<button class="q" ${t[2]?`data-mt="${t[2]}"`:`data-soon="${t[1]}"`}><span style="font-size:20px">${t[0]}</span>${t[1]}</button>`).join('')}</div></details>`).join('')}`}
 function mt(k){if(k=='out'){toast('Logged out (preview only)');return}if(k=='test'){toast('Test sent to '+NCH.Email[0]+(NCH.WhatsApp[0]?' and '+NCH.WhatsApp[0]:''));return}if(k=='recp'){FLT='paused';tab='rec'}else tab=k;render()}
-function accounts(){return back('Accounts')+`<button class="cta" style="margin-bottom:14px" data-anew>Add account <span>+</span></button>`+ACCS.map(a=>`<div class="card" style="${a.on?'':'opacity:.55'}"><div class="row"><div style="display:flex;gap:12px;align-items:center"><div class="ic">${TI[a.type]}</div><div><h2>${a.name}</h2><div class="sub">${a.type} · ${a.cur}${a.def?' · <span class="soon">Default</span>':''}${a.on?'':' · Disabled'}</div></div></div><b class="${a.bal<0?'out':''}">${a.bal<0?'−':''}${inr(Math.abs(a.bal))}</b></div><div class="row" style="margin-top:12px;gap:8px;justify-content:flex-start"><button class="pill" data-aedit="${a.id}">${svg('manage')}Edit</button><button class="pill" data-aon="${a.id}">${a.on?'Disable':'Enable'}</button></div></div>`).join('')}
+function accounts(){return back('Accounts')+`<button class="cta" style="margin-bottom:14px" data-anew>Add account <span>+</span></button>`+ACCS.map(a=>`<div class="card" style="${a.on?'':'opacity:.55'}"><div class="row"><div style="display:flex;gap:12px;align-items:center"><div class="ic">${TI[a.type]}</div><div><h2>${a.name}</h2><div class="sub">${a.type} \u00b7 ${a.cur}${a.def?' \u00b7 <span class="soon">Default</span>':''}${a.on?'':' \u00b7 Disabled'}</div></div></div><b class="${a.bal<0?'out':''}">${a.bal<0?'\u2212':''}${inr(Math.abs(a.bal))}</b></div><div class="row" style="margin-top:12px;gap:8px;justify-content:flex-start"><button class="pill" data-aedit="${a.id}">${svg('manage')}Edit</button><button class="pill" data-aon="${a.id}">${a.on?'Disable':'Enable'}</button></div></div>`).join('')}
 function openAcc(id){AF=id?{...ACCS.find(x=>x.id==id)}:{id:0,name:'',type:'Bank',bal:0,cur:'INR',on:true,def:false};asheet(true)}
-function asheet(first){sheet.classList.remove('full');sheet.innerHTML=`<div class="panel"><div class="row"><h1>${AF.id?'Edit account':'New account'}</h1><button class="ic" data-close aria-label="Close">✕</button></div>
+function asheet(first){sheet.classList.remove('full');sheet.innerHTML=`<div class="panel"><div class="row"><h1>${AF.id?'Edit account':'New account'}</h1><button class="ic" data-close aria-label="Close">\u2715</button></div>
  <label class="fld">Name</label><input class="inp" data-a="name" value="${AF.name}" placeholder="e.g. SBI Bank">
  <label class="fld">Account type</label><div class="chips" style="flex-wrap:wrap">${Object.keys(TI).map(t=>`<button class="pill ${AF.type==t?'on':''}" data-aset="type:${t}">${TI[t]} ${t}</button>`).join('')}</div>
  <label class="fld">Opening balance</label><input class="inp" data-a="bal" data-n="1" type="number" value="${AF.bal}">
  <label class="fld">Currency</label><div class="chips">${CURS.map(c=>`<button class="pill ${AF.cur==c[0]?'on':''}" data-aset="cur:${c[0]}">${c[0]}</button>`).join('')}</div>
  <div class="swrow"><div>Default account<small>Pre-selected when you add transactions.</small></div><button class="sw ${AF.def?'on':''}" data-ab role="switch" aria-checked="${!!AF.def}" aria-label="Default account"></button></div>
- <button class="cta" style="margin-top:16px" data-asave>Save account <span>→</span></button></div>`;
+ <button class="cta" style="margin-top:16px" data-asave>Save account <span>\u2192</span></button></div>`;
  if(first){sheet.querySelector('.panel').classList.add('pop');sheet.classList.add('open')}}
 function asave(){if(!AF.name.trim()){toast('Give the account a name');return}AF.bal=+AF.bal||0;if(AF.def)ACCS.forEach(a=>a.def=false);
  if(AF.id)ACCS=ACCS.map(a=>a.id==AF.id?AF:a);else{AF.id=Math.max(0,...ACCS.map(a=>a.id))+1;ACCS.push(AF)}syncAcc();sheet.classList.remove('open');toast('Account saved');render()}
-function pmethods(){return back('Payment methods')+`<div class="card"><div class="sub" style="margin-bottom:6px">Used when you add transactions and recurring rules.</div>${PM.map((p,i)=>`<div class="tx"><div class="ic">💳</div><div class="m"><b>${p}</b><small>${i<6?'Built-in':'Custom'}</small></div>${i<6?'':`<button class="pill" data-pmdel="${i}">Remove</button>`}</div>`).join('')}</div><div class="card"><h2>Add your own</h2><div class="row" style="gap:8px;margin-top:10px"><input class="inp" id="pmn" placeholder="e.g. Net banking"><button class="pill on" data-pmadd>Add</button></div></div>`}
+function pmethods(){return back('Payment methods')+`<div class="card"><div class="sub" style="margin-bottom:6px">Used when you add transactions and recurring rules.</div>${PM.map((p,i)=>`<div class="tx"><div class="ic">\ud83d\udcb3</div><div class="m"><b>${p}</b><small>${i<6?'Built-in':'Custom'}</small></div>${i<6?'':`<button class="pill" data-pmdel="${i}">Remove</button>`}</div>`).join('')}</div><div class="card"><h2>Add your own</h2><div class="row" style="gap:8px;margin-top:10px"><input class="inp" id="pmn" placeholder="e.g. Net banking"><button class="pill on" data-pmadd>Add</button></div></div>`}
 function currency(){return back('Currency & format')+`<div class="card"><label class="fld" style="margin-top:0">Default currency</label><div class="chips" style="flex-wrap:wrap">${CURS.map(c=>`<button class="pill ${CUR.code==c[0]?'on':''}" data-cur="${c[0]}">${c[1]} ${c[0]}</button>`).join('')}</div>
- <label class="fld">Decimal places</label><div class="stepper"><button data-dec="-1" aria-label="Fewer">−</button><b>${CUR.dec}</b><button data-dec="1" aria-label="More">+</button></div>
+ <label class="fld">Decimal places</label><div class="stepper"><button data-dec="-1" aria-label="Fewer">\u2212</button><b>${CUR.dec}</b><button data-dec="1" aria-label="More">+</button></div>
  <label class="fld">Number format</label><div class="chips"><button class="pill ${CUR.loc=='en-IN'?'on':''}" data-cfmt="en-IN">1,25,000</button><button class="pill ${CUR.loc!='en-IN'?'on':''}" data-cfmt="en-US">125,000</button></div>
  <label class="fld">Exchange rates</label><div class="chips"><button class="pill on">Automatic</button><button class="pill">Manual</button></div></div><div class="card"><div class="sub">Preview</div><div class="bal">${inr(125000)}</div></div>`}
-function profile(){return back('My profile')+`<div class="card"><div style="text-align:center"><div class="ic" style="width:72px;height:72px;border-radius:50%;margin:0 auto 6px;font-size:30px">👤</div><div class="sub">Profile photo</div></div>${[['name','Name','text'],['email','Email','email'],['phone','Phone','tel']].map(f=>`<label class="fld">${f[1]}</label><input class="inp" data-p="${f[0]}" type="${f[2]}" value="${PROF[f[0]]}">`).join('')}<label class="fld">Preferred language</label><select class="inp" data-p="lang">${['English','Hindi','Tamil','Telugu'].map(l=>`<option ${PROF.lang==l?'selected':''}>${l}</option>`).join('')}</select><button class="cta" style="margin-top:16px" data-profsave>Save <span>✓</span></button></div>`}
-const CI={Email:'📧',WhatsApp:'📱',Webhook:'🔗'};
-function channels(){return back('Notification channels')+Object.keys(NCH).map(c=>`<div class="card"><h2>${CI[c]} ${c}</h2>${NCH[c].map(v=>`<div class="tx"><span class="in">✓</span><div class="m"><b style="word-break:break-all">${v}</b></div><button class="pill" data-chdel="${c}|${v}">Remove</button></div>`).join('')}<div class="row" style="gap:8px;margin-top:10px"><input class="inp" id="ch_${c}" placeholder="Add ${PH[c]}"><button class="pill on" data-chadd="${c}">Add</button></div></div>`).join('')+`<button class="cta" data-mt="test">Send test notification <span>🧪</span></button>`}
+function profile(){return back('My profile')+`<div class="card"><div style="text-align:center"><div class="ic" style="width:72px;height:72px;border-radius:50%;margin:0 auto 6px;font-size:30px">\ud83d\udc64</div><div class="sub">Profile photo</div></div>${[['name','Name','text'],['email','Email','email'],['phone','Phone','tel']].map(f=>`<label class="fld">${f[1]}</label><input class="inp" data-p="${f[0]}" type="${f[2]}" value="${PROF[f[0]]}">`).join('')}<label class="fld">Preferred language</label><select class="inp" data-p="lang">${['English','Hindi','Tamil','Telugu'].map(l=>`<option ${PROF.lang==l?'selected':''}>${l}</option>`).join('')}</select><button class="cta" style="margin-top:16px" data-profsave>Save <span>\u2713</span></button></div>`}
+const CI={Email:'\ud83d\udce7',WhatsApp:'\ud83d\udcf1',Webhook:'\ud83d\udd17'};
+function channels(){return back('Notification channels')+Object.keys(NCH).map(c=>`<div class="card"><h2>${CI[c]} ${c}</h2>${NCH[c].map(v=>`<div class="tx"><span class="in">\u2713</span><div class="m"><b style="word-break:break-all">${v}</b></div><button class="pill" data-chdel="${c}|${v}">Remove</button></div>`).join('')}<div class="row" style="gap:8px;margin-top:10px"><input class="inp" id="ch_${c}" placeholder="Add ${PH[c]}"><button class="pill on" data-chadd="${c}">Add</button></div></div>`).join('')+`<button class="cta" data-mt="test">Send test notification <span>\ud83e\uddea</span></button>`}
 function rdefs(){return back('Recurring defaults')+`<div class="card"><label class="fld" style="margin-top:0">Default frequency</label><div class="chips">${[['day','Daily'],['week','Weekly'],['month','Monthly'],['year','Yearly']].map(x=>`<button class="pill ${RDEF.freq==x[0]?'on':''}" data-rd="freq:${x[0]}">${x[1]}</button>`).join('')}</div><label class="fld">Default reminder</label><div class="chips">${[[7,'7 days'],[3,'3 days'],[1,'1 day'],[0,'On the day']].map(x=>`<button class="pill ${RDEF.rem==x[0]?'on':''}" data-rd="rem:${x[0]}">${x[1]}</button>`).join('')}</div><label class="fld">Default account</label><select class="inp" data-rdsel="acct">${ACC.map(a=>`<option ${a==RDEF.acct?'selected':''}>${a}</option>`).join('')}</select><label class="fld">Default payment method</label><select class="inp" data-rdsel="pm">${PM.map(a=>`<option ${a==RDEF.pm?'selected':''}>${a}</option>`).join('')}</select></div><div class="sub">New recurring rules start with these values.</div>`}
 function wspaces(){return back('Workspaces')+Object.keys(WS).map(k=>`<div class="card row"><div><h2>${k}</h2><div class="sub">${inr(WS[k].bal)} net balance</div></div>${k==ws?'<span class="st ok">Active</span>':`<button class="pill on" data-wsw="${k}">Switch</button>`}</div>`).join('')}
 
@@ -441,22 +444,22 @@ function render(){
 function initSlide(s){const k=s.querySelector('.knob');let drag=false,x0=0;const max=()=>s.clientWidth-54;
  k.onpointerdown=e=>{drag=true;x0=e.clientX;k.setPointerCapture(e.pointerId)};
  k.onpointermove=e=>{if(!drag)return;k.style.left=Math.max(5,Math.min(max(),5+e.clientX-x0))+'px'};
- k.onpointerup=()=>{if(!drag)return;drag=false;if(parseInt(k.style.left)>max()-20){toast('Card bill of ₹28,400 paid from HDFC Savings');k.style.left='5px'}else{k.style.transition='.2s';k.style.left='5px';setTimeout(()=>k.style.transition='',220)}}}
+ k.onpointerup=()=>{if(!drag)return;drag=false;if(parseInt(k.style.left)>max()-20){toast('Card bill of \u20b928,400 paid from HDFC Savings');k.style.left='5px'}else{k.style.transition='.2s';k.style.left='5px';setTimeout(()=>k.style.transition='',220)}}}
 
 let type='Expense',amt='0',cat='Food';
 let AS=1,AX={acct:'HDFC Savings',to:'ICICI Debit',pm:'UPI'};
-function sheetHTML(){const hd=(t,b)=>`<div class="row" style="justify-content:flex-start;gap:12px;margin-bottom:6px"><button class="ic" data-bk aria-label="Back">‹</button><h1>${t}</h1></div>`;
+function sheetHTML(){const hd=(t,b)=>`<div class="row" style="justify-content:flex-start;gap:12px;margin-bottom:6px"><button class="ic" data-bk aria-label="Back">\u2039</button><h1>${t}</h1></div>`;
  if(AS==1)return `<div class="panel">${hd('New '+type.toLowerCase())}
  <div class="seg">${['Expense','Income','Transfer'].map(t=>`<button class="${t==type?'on':''}" data-type="${t}">${svg(IC[t])}${t}</button>`).join('')}</div>
  <div class="big ${type=='Income'?'in':''}">${inr(+amt)}</div>
  ${type=='Transfer'?'':`<div class="chips">${['Food','Transport','Bills','Shopping','Health','Rent'].map(c=>`<button class="pill ${c==cat?'on':''}" data-cat="${c}">${c}</button>`).join('')}</div>`}
- <div class="grow"></div><div class="keys">${[1,2,3,4,5,6,7,8,9,'C',0,'⌫'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div>
- <button class="cta" data-save>Save ${type.toLowerCase()} <span>→</span></button></div>`;
- const row=(k,a)=>`<button class="arow ${AX[k]==a.name?'on':''}" data-pick="${k}|${a.name}"><span class="ic">${TI[a.type]}</span><span class="m"><b>${a.name}</b><small>${a.type} · ${inr(a.bal)}</small></span><i></i></button>`,L=ACCS.filter(a=>a.on);
- return `<div class="panel">${hd('Choose account')}<div class="sub" style="margin-bottom:6px">${inr(+amt)} · ${type=='Transfer'?'Transfer':type=='Income'?'Income':cat}</div><div class="grow">
+ <div class="grow"></div><div class="keys">${[1,2,3,4,5,6,7,8,9,'C',0,'\u232b'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div>
+ <button class="cta" data-save>Save ${type.toLowerCase()} <span>\u2192</span></button></div>`;
+ const row=(k,a)=>`<button class="arow ${AX[k]==a.name?'on':''}" data-pick="${k}|${a.name}"><span class="ic">${TI[a.type]}</span><span class="m"><b>${a.name}</b><small>${a.type} \u00b7 ${inr(a.bal)}</small></span><i></i></button>`,L=ACCS.filter(a=>a.on);
+ return `<div class="panel">${hd('Choose account')}<div class="sub" style="margin-bottom:6px">${inr(+amt)} \u00b7 ${type=='Transfer'?'Transfer':type=='Income'?'Income':cat}</div><div class="grow">
  <label class="fld">${type=='Transfer'?'From account':type=='Income'?'Received in':'Paid from'}</label>${L.map(a=>row('acct',a)).join('')}
  ${type=='Transfer'?`<label class="fld">To account</label>${L.map(a=>row('to',a)).join('')}`:`<label class="fld">Payment mode</label><div class="chips" style="flex-wrap:wrap">${PM.map(p=>`<button class="pill ${AX.pm==p?'on':''}" data-pick="pm|${p}">${p}</button>`).join('')}</div>`}</div>
- <button class="cta" style="margin-top:12px" data-confirm>Confirm ${type.toLowerCase()} <span>✓</span></button></div>`}
+ <button class="cta" style="margin-top:12px" data-confirm>Confirm ${type.toLowerCase()} <span>\u2713</span></button></div>`}
 function openSheet(t){type=t||'Expense';amt='0';AS=1;sheet.innerHTML=sheetHTML();sheet.querySelector('.panel').classList.add('pop');sheet.classList.add('open','full')}
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
 
@@ -492,7 +495,7 @@ document.getElementById('app').addEventListener('click',e=>{
  else if(d.confirm!==undefined){if(type=='Transfer'&&AX.acct==AX.to){toast('Pick two different accounts');return}
   const a=ACCS.find(x=>x.name==AX.acct),b=ACCS.find(x=>x.name==AX.to),n=+amt;
   if(type=='Expense')a.bal-=n;else if(type=='Income')a.bal+=n;else{a.bal-=n;b.bal+=n}
-  TX.unshift([type=='Income'?'💰':type=='Transfer'?'🔁':'🧾',type=='Expense'?cat:type,type=='Transfer'?AX.acct+' → '+AX.to:type+' · '+AX.acct+' · '+AX.pm,type=='Expense'?-n:n,'Just now',type=='Transfer'?'x':0]);
+  TX.unshift([type=='Income'?'\ud83d\udcb0':type=='Transfer'?'\ud83d\udd01':'\ud83e\uddfe',type=='Expense'?cat:type,type=='Transfer'?AX.acct+' \u2192 '+AX.to:type+' \u00b7 '+AX.acct+' \u00b7 '+AX.pm,type=='Expense'?-n:n,'Just now',type=='Transfer'?'x':0]);
   sheet.classList.remove('open','full');toast(type+' saved to '+AX.acct);render()}
  else if(d.rnew!==undefined)openRec(0);
  else if(d.set){const[k,v]=d.set.split(':');R[k]=/^-?\d+$/.test(v)?+v:v;if(k=='freq')R.every=1;rsheet()}
@@ -511,10 +514,10 @@ document.getElementById('app').addEventListener('click',e=>{
  else if(d.close!==undefined)sheet.classList.remove('open');
  else if(d.type){type=d.type;sheet.innerHTML=sheetHTML()}
  else if(d.cat){cat=d.cat;sheet.innerHTML=sheetHTML()}
- else if(d.k!==undefined){amt=d.k=='C'?'0':d.k=='⌫'?(amt.slice(0,-1)||'0'):(amt=='0'?d.k:(amt+d.k).slice(0,8));sheet.innerHTML=sheetHTML()}
+ else if(d.k!==undefined){amt=d.k=='C'?'0':d.k=='\u232b'?(amt.slice(0,-1)||'0'):(amt=='0'?d.k:(amt+d.k).slice(0,8));sheet.innerHTML=sheetHTML()}
  else if(d.save!==undefined){if(+amt>0){AS=2;sheet.innerHTML=sheetHTML()}else toast('Enter an amount first')}
 });
-render();
+render();window.__ok=1;
 </script>
 </body>
 </html>
