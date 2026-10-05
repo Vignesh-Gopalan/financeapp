@@ -255,6 +255,15 @@ header,main{position:relative;z-index:1}nav{z-index:2;background:linear-gradient
 .del{width:100%;text-align:center;margin-top:10px;color:var(--out);font-size:calc(13px*var(--fs));padding:8px}
 
 h1{font-size:calc(20px*var(--fh))}.logo{font-size:calc(17px*var(--fh))}h2{font-size:calc(14px*var(--ft))}.bal{font-size:calc(34px*var(--ft))}.big{font-size:calc(42px*var(--ft))}
+@media(max-width:600px),(max-height:700px){
+ html{background:#02050f}html[data-theme=light]{background:#eef2fb}
+ .phone-frame{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-height:none}
+ nav{padding-top:8px;padding-bottom:calc(8px + max(0px,var(--safe-b) - 14px))}
+ main{padding-bottom:calc(86px + max(0px,var(--safe-b) - 14px))}
+ .sheet.full .panel{padding-bottom:calc(14px + max(0px,var(--safe-b) - 10px))}
+}
+canvas.sky{display:block;pointer-events:none}
+html[data-theme=light] canvas.sky{display:none}
 </style>
 </head>
 <body>
@@ -779,15 +788,25 @@ function arUI(){const U={day:'day(s)',week:'week(s)',month:'month(s)',year:'year
  <div class="swrow"><div>Record automatically<small>Off means you confirm each one.</small></div><button class="sw ${AXR.auto?'on':''}" data-arb="auto" role="switch" aria-checked="${!!AXR.auto}" aria-label="Record automatically"></button></div></details>
  <div class="sumbox" style="margin:12px 0 0">${desc(d)}${nx?'. Next: <b>'+fmt(nx.due)+'</b>':'. No upcoming date, check the end settings'}.</div></div>`}
 
-/* ---------- Twinkling and flying stars ---------- */
-(function(){const app=document.getElementById('app');
- const place=e=>{e.style.left=Math.random()*100+'%';e.style.top=Math.random()*100+'%'};
- const fillStars=(L,n)=>{for(let i=0;i<n;i++){const e=document.createElement('i'),z=Math.random(),sz=z<.75?1:z<.95?1.6:2.2;e.style.width=e.style.height=sz+'px';e.style.setProperty('--d',(2.5+Math.random()*5)+'s');e.style.setProperty('--o',.3+Math.random()*.5);e.style.animationDelay=(-Math.random()*6)+'s';place(e);e.addEventListener('animationiteration',()=>{if(Math.random()<.6)place(e)});L.appendChild(e)}};
- const mkL=(host,n,c)=>{const L=document.createElement('div');L.className='stars '+(c||'');host.prepend(L);fillStars(L,n);return L};
- const bg=mkL(document.body,110,'bg'),inApp=mkL(app,69);
- new MutationObserver(()=>{const p=sheet.querySelector('.panel');if(p&&!p.querySelector('.stars'))mkL(p,28)}).observe(sheet,{childList:true});
- const shoot=()=>{if(document.documentElement.dataset.theme!='light'&&!document.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const H=Math.random()<.5?bg:inApp,e=document.createElement('b'),r=20+Math.random()*20,len=200+Math.random()*160,a=r*Math.PI/180;e.className='shoot';e.style.cssText='left:'+Math.random()*60+'%;top:'+Math.random()*45+'%;--r:'+r+'deg;--dx:'+Math.cos(a)*len+'px;--dy:'+Math.sin(a)*len+'px;--t:'+(.9+Math.random()*.6)+'s';e.addEventListener('animationend',()=>e.remove());H.appendChild(e)}setTimeout(shoot,5000+Math.random()*7000)};
- setTimeout(shoot,3500)})();
+/* ---------- Twinkling and flying stars (canvas) ---------- */
+(function(){
+ const reduce=()=>matchMedia('(prefers-reduced-motion: reduce)').matches,light=()=>document.documentElement.dataset.theme=='light';
+ function sky(host,n,fixed,z,front){const c=document.createElement('canvas');c.className='sky';c.setAttribute('aria-hidden','true');c.style.cssText='position:'+(fixed?'fixed':'absolute')+';left:0;top:0;width:100%;height:100%;z-index:'+z+';pointer-events:none';front?host.appendChild(c):host.prepend(c);
+  const ctx=c.getContext&&c.getContext('2d');if(!ctx)return;const dpr=Math.min(2,window.devicePixelRatio||1);let W=0,H=0,S=[],sh=null,nextShoot=performance.now()+3500+Math.random()*4000,last=0;
+  const mkS=t=>({x:Math.random(),y:Math.random(),r:Math.random()<.72?.7:Math.random()<.85?1.1:1.6,a:.35+Math.random()*.5,t0:t-Math.random()*6000,d:2800+Math.random()*5200});
+  function size(){const r=c.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);if(!S.length)S=Array.from({length:n},()=>mkS(performance.now()))}
+  function draw(t){ctx.clearRect(0,0,W,H);if(light())return;const still=reduce();
+   S.forEach(s=>{let p=(t-s.t0)/s.d;if(p>=1){s.x=Math.random();s.y=Math.random();s.t0=t;s.d=2800+Math.random()*5200;p=0}
+    const al=still?s.a*.6:s.a*Math.sin(Math.PI*p),x=s.x*W,y=s.y*H;if(al<.02)return;
+    ctx.fillStyle='rgba(214,228,255,'+al+')';ctx.beginPath();ctx.arc(x,y,s.r,0,6.283);ctx.fill();
+    if(s.r>1){ctx.fillStyle='rgba(120,170,255,'+al*.28+')';ctx.beginPath();ctx.arc(x,y,s.r*2.6,0,6.283);ctx.fill()}});
+   if(still)return;
+   if(!sh&&t>nextShoot){const a=(20+Math.random()*20)*Math.PI/180,sp=.55+Math.random()*.35;sh={x:Math.random()*W*.6,y:Math.random()*H*.4,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,t0:t,life:1100};nextShoot=t+5000+Math.random()*7000}
+   if(sh){const q=(t-sh.t0)/sh.life;if(q>=1)sh=null;else{const x=sh.x+sh.vx*(t-sh.t0),y=sh.y+sh.vy*(t-sh.t0),L=90,mx=Math.hypot(sh.vx,sh.vy),tx=x-sh.vx/mx*L,ty=y-sh.vy/mx*L,g=ctx.createLinearGradient(tx,ty,x,y),al=Math.sin(Math.PI*q);g.addColorStop(0,'rgba(207,224,255,0)');g.addColorStop(1,'rgba(255,255,255,'+.9*al+')');ctx.strokeStyle=g;ctx.lineWidth=1.6;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(x,y);ctx.stroke()}}}
+  function loop(t){if(!document.hidden&&t-last>32){last=t;draw(t)}requestAnimationFrame(loop)}
+  size();addEventListener('resize',size);addEventListener('orientationchange',()=>setTimeout(size,200));if(window.ResizeObserver)new ResizeObserver(size).observe(host===document.body?document.documentElement:host);
+  requestAnimationFrame(loop)}
+ sky(document.body,110,true,0,false);sky(document.getElementById('app'),69,false,7,true)})();
 
 const NAV=[['home','Home','home'],['tx','Activity','txn'],['add','','bolt'],['inv','Invest','trend'],['more','More','more']];
 function render(){
