@@ -258,9 +258,10 @@ h1{font-size:calc(20px*var(--fh))}.logo{font-size:calc(17px*var(--fh))}h2{font-s
 @media(max-width:600px),(max-height:700px){
  html{background:#02050f}html[data-theme=light]{background:#eef2fb}
  .phone-frame{position:fixed;top:0;right:0;bottom:0;left:0;width:auto;height:auto;max-height:none}
- nav{padding-top:8px;padding-bottom:calc(8px + max(0px,var(--safe-b) - 14px))}
- main{padding-bottom:calc(86px + max(0px,var(--safe-b) - 14px))}
- .sheet.full .panel{padding-bottom:calc(14px + max(0px,var(--safe-b) - 10px))}
+ nav{padding-top:6px;padding-bottom:max(8px,calc(var(--safe-b)*.35))}
+ main{padding-bottom:calc(84px + var(--safe-b)*.35)}
+ .sheet.full .panel{padding-bottom:max(12px,calc(var(--safe-b)*.5))}
+ .fab{margin-top:-14px}
 }
 canvas.sky{display:block;pointer-events:none}
 html[data-theme=light] canvas.sky{display:none}
